@@ -1,9 +1,15 @@
 <template>
-    <div></div>
+    <div>
+        <Expenses />
+    </div>
 </template>
 
 <script>
-export default {};
+import Expenses from "./components/Expenses";
+export default {
+    components: {
+        Expenses
+    }
+};
 </script>
-<style>
-</style>
+<style></style>

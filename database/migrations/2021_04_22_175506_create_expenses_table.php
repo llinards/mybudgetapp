@@ -17,7 +17,7 @@ class CreateExpensesTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->string('name');
-            $table->decimal('amount',9,3)->default('0,00');
+            $table->decimal('amount', 8, 2);
             $table->boolean('payed')->default(false);
             $table->boolean('reserved')->default(false);
             $table->timestamps();
