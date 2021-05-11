@@ -18,7 +18,7 @@ class CreateExpensesTable extends Migration
             $table->integer('user_id');
             $table->string('name');
             $table->decimal('amount', 8, 2);
-            $table->boolean('status');
+            $table->integer('status');
             $table->timestamps();
         });
     }
