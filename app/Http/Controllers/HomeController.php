@@ -26,10 +26,4 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
-    public function getAllExpenses()
-    {
-        $allExpenses = Expense::get();
-        return response()->json($allExpenses);
-    }
 }

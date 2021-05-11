@@ -1,15 +1,15 @@
 <template>
-    <div>
-        <Expenses />
-    </div>
+  <div>
+    <Expenses />
+  </div>
 </template>
 
 <script>
 import Expenses from "./components/Expenses";
 export default {
-    components: {
-        Expenses
-    }
+  components: {
+    Expenses,
+  },
 };
 </script>
 <style></style>

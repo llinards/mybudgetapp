@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ExpensesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,4 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/getAllExpenses', [HomeController::class, 'getAllExpenses']);
+Route::get('/getAllExpenses', [ExpensesController::class, 'getAllExpenses']);

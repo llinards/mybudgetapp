@@ -1,67 +1,93 @@
 <template>
-    <div class="container">
-        <h3>Izdevumi</h3>
-        <div class="table-responsive">
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Nosaukums</th>
-                        <th scope="col">Summa</th>
-                        <th scope="col">Samaksāts?</th>
-                        <th scope="col">Rezervēts?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(expense, index) in allExpenses" :key="index">
-                        <td>{{ expense.name }}</td>
-                        <td>{{ expense.amount }} EUR</td>
-                        <td>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="container">
+    <h4>Izdevumi</h4>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Nosaukums</th>
+            <th scope="col">Summa</th>
+            <th scope="col">Statuss</th>
+            <th scope="col" />
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="expense in allExpenses" :key="expense.id">
+            <td>{{ expense.name }}</td>
+            <td>{{ expense.amount }} EUR</td>
+            <td>{{ expenseStatus(expense) }}</td>
+            <td class="text-right">
+              <button
+                type="button"
+                @click="selectedExpense = expense"
+                class="btn btn-warning"
+                data-toggle="modal"
+                data-target="#expense"
+              >
+                Rediģēt
+              </button>
+              <button
+                type="button"
+                @click="deleteExpense(expense.id)"
+                class="btn btn-danger"
+              >
+                Dzēst
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <Expense :selectedExpense="selectedExpense" @expense-data="modifyExpenses" />
+  </div>
 </template>
 
 <script>
+import Expense from "./Expense";
 export default {
-    name: "Expenses",
-    data() {
-        return {
-            allExpenses: []
-        };
+  name: "Expenses",
+  components: {
+    Expense,
+  },
+  data() {
+    return {
+      selectedExpense: {},
+      allExpenses: [],
+    };
+  },
+  methods: {
+    getAllExpenses() {
+      axios
+        .get("/api/getAllExpenses")
+        .then((response) => {
+          this.allExpenses = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    methods: {
-        getAllExpenses() {
-            axios
-                .get("/api/getAllExpenses")
-                .then(response => {
-                    this.allExpenses = response.data;
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        }
+    expenseStatus(expense) {
+      if (expense.status == 0) {
+        return "Nav samaksāts";
+      } else if (expense.status == 1) {
+        return "Rezervēts";
+      } else if (expense.status == 2) {
+        return "Samaksāts";
+      } else {
+        return "";
+      }
     },
-    created() {
-        this.getAllExpenses();
+    deleteExpense(id) {
+      this.allExpenses = this.allExpenses.filter(
+        (expense) => expense.id !== id
+      );
+    },
+    modifyExpenses(expense) {
+      console.log(expense);
     }
+  },
+  created() {
+    this.getAllExpenses();
+  },
 };
 </script>

@@ -18,15 +18,20 @@ class ExpensesSeeder extends Seeder
             'user_id' => 1,
             'name' => 'Degvielas izmaksas',
             'amount' => '300.00',
-            'payed' => false,
-            'reserved' => true
+            'status' => 1
+
         ]);
         DB::table('expenses')->insert([
             'user_id' => 1,
             'name' => 'Auto līzings',
             'amount' => '256.96',
-            'payed' => true,
-            'reserved' => false
+            'status' => 0
+        ]);
+        DB::table('expenses')->insert([
+            'user_id' => 1,
+            'name' => 'KASKO',
+            'amount' => '36.42',
+            'status' => 2
         ]);
     }
 }
