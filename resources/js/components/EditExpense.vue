@@ -1,35 +1,39 @@
 <template>
-  <div class="modal fade" id="expense">
+  <div class="modal fade" id="editExpense">
     <div class="modal-dialog">
       <div class="modal-content">
         <form>
           <div class="modal-body">
             <div class="form-group">
-              <label for="expenseName">Izdevums</label>
+              <label for="editExpenseName">Izdevums</label>
               <input
                 type="text"
                 class="form-control"
-                id="expenseName"
+                id="editExpenseName"
                 v-model="selectedExpense.name"
               />
             </div>
             <div class="form-group">
-              <label for="expenseAmount">Summa</label>
+              <label for="editExpenseAmount">Summa</label>
               <input
                 type="text"
                 class="form-control"
-                id="expenseAmount"
+                id="editExpenseAmount"
                 v-model="selectedExpense.amount"
               />
             </div>
             <div class="form-group">
-              <label for="exampleFormControlSelect1">Maksājuma statuss</label>
+              <label for="editExpenseStatus">Maksājuma statuss</label>
               <select
                 v-model="selectedExpense.status"
                 class="form-control"
-                id="exampleFormControlSelect1"
+                id="editExpenseStatus"
               >
-                <option v-for="(state, index) in states" :key="index" :value="state">
+                <option
+                  v-for="(state, index) in states"
+                  :key="index"
+                  :value="state"
+                >
                   {{ status(state) }}
                 </option>
               </select>
@@ -43,7 +47,13 @@
             >
               Aizvērt
             </button>
-            <button @click="expenseData" data-dismiss="modal" class="btn btn-success">Atjaunot</button>
+            <button
+              @click.prevent="editExpense"
+              data-dismiss="modal"
+              class="btn btn-success"
+            >
+              Atjaunot
+            </button>
           </div>
         </form>
       </div>
@@ -52,7 +62,7 @@
 </template>
 <script>
 export default {
-  name: "Expense",
+  name: "EditExpense",
   props: ["selectedExpense"],
   data() {
     return {
@@ -71,10 +81,9 @@ export default {
         return "";
       }
     },
-    expenseData(e) {
-      e.preventDefault();
-      this.$emit('expense-data', this.selectedExpense);
-    }
+    editExpense() {
+      this.$emit("edit-expense", this.selectedExpense);
+    },
   },
 };
 </script>

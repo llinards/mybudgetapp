@@ -1,6 +1,13 @@
 <template>
   <div class="container">
-    <h4>Izdevumi</h4>
+    <h5>Izdevumi</h5>
+    <button
+      class="btn btn-success mb-1"
+      data-toggle="modal"
+      data-target="#addExpense"
+    >
+      Pievienot izdevumu
+    </button>
     <div class="table-responsive">
       <table class="table table-hover">
         <thead class="thead-dark">
@@ -16,13 +23,13 @@
             <td>{{ expense.name }}</td>
             <td>{{ expense.amount }} EUR</td>
             <td>{{ expenseStatus(expense) }}</td>
-            <td class="text-right">
+            <td class="buttons">
               <button
                 type="button"
                 @click="selectedExpense = expense"
                 class="btn btn-warning"
                 data-toggle="modal"
-                data-target="#expense"
+                data-target="#editExpense"
               >
                 Rediģēt
               </button>
@@ -35,24 +42,33 @@
               </button>
             </td>
           </tr>
+          <td class="text-right" colspan="4">
+            <h5>Kopā: {{ totalSumOfExpenses }} EUR</h5>
+          </td>
         </tbody>
       </table>
     </div>
-    <Expense :selectedExpense="selectedExpense" @expense-data="modifyExpenses" />
+    <EditExpense
+      :selectedExpense="selectedExpense"
+      @edit-expense="editExpense"
+    />
+    <AddExpense @add-expense="addExpense" />
   </div>
 </template>
 
 <script>
-import Expense from "./Expense";
+import AddExpense from "./AddExpense";
+import EditExpense from "./EditExpense";
 export default {
   name: "Expenses",
   components: {
-    Expense,
+    AddExpense,
+    EditExpense,
   },
   data() {
     return {
       selectedExpense: {},
-      allExpenses: [],
+      allExpenses: {},
     };
   },
   methods: {
@@ -82,12 +98,38 @@ export default {
         (expense) => expense.id !== id
       );
     },
-    modifyExpenses(expense) {
+    editExpense(expense) {
       console.log(expense);
-    }
+    },
+    addExpense(expense) {
+      this.allExpenses.push(expense);
+    },
+  },
+  computed: {
+    totalSumOfExpenses() {
+      let total = 0;
+      for (var i = 0; i < this.allExpenses.length; i++) {
+        total += parseFloat(this.allExpenses[i].amount);
+      }
+      return total;
+    },
   },
   created() {
     this.getAllExpenses();
   },
 };
 </script>
+<style scoped>
+.buttons {
+  text-align: right;
+}
+@media (max-width: 768px) {
+  .buttons {
+    text-align: center;
+  }
+
+  .buttons button:first-child {
+    margin-bottom: 0.5rem;
+  }
+}
+</style>
