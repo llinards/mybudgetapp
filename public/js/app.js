@@ -1960,6 +1960,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     addExpense: function addExpense() {
       this.$emit("add-expense", this.newExpense);
+      this.newExpense["name"] = "";
+      this.newExpense["amount"] = 0.0;
+      this.newExpense["status"] = 0;
     }
   }
 });
@@ -2149,14 +2152,15 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       selectedExpense: {},
-      allExpenses: {}
+      allExpenses: {},
+      updatedExpenses: false
     };
   },
   methods: {
     getAllExpenses: function getAllExpenses() {
       var _this = this;
 
-      axios.get("/api/getAllExpenses").then(function (response) {
+      axios.get("/api/expenses").then(function (response) {
         _this.allExpenses = response.data;
       })["catch"](function (err) {
         console.log(err);
@@ -2174,15 +2178,34 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteExpense: function deleteExpense(id) {
-      this.allExpenses = this.allExpenses.filter(function (expense) {
-        return expense.id !== id;
+      var _this2 = this;
+
+      axios["delete"]("/api/expenses/".concat(id)).then(function (response) {
+        console.log(response.data);
+        _this2.allExpenses = _this2.allExpenses.filter(function (expense) {
+          return expense.id !== id;
+        });
+      })["catch"](function (err) {
+        console.log(err);
       });
     },
     editExpense: function editExpense(expense) {
       console.log(expense);
     },
     addExpense: function addExpense(expense) {
-      this.allExpenses.push(expense);
+      var _this3 = this;
+
+      axios.post("/api/expenses", {
+        name: expense.name,
+        amount: expense.amount,
+        status: expense.status
+      }).then(function (response) {
+        console.log(response.data);
+
+        _this3.getAllExpenses();
+      })["catch"](function (err) {
+        console.log(err);
+      });
     }
   },
   computed: {
@@ -6721,7 +6744,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.buttons[data-v-669e5306] {\n  text-align: right;\n}\n@media (max-width: 768px) {\n.buttons[data-v-669e5306] {\n    text-align: center;\n}\n.buttons button[data-v-669e5306]:first-child {\n    margin-bottom: 0.5rem;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.buttons[data-v-669e5306],\n.total[data-v-669e5306] {\n  text-align: right;\n}\n@media (max-width: 768px) {\n.buttons[data-v-669e5306] {\n    text-align: center;\n}\n.total[data-v-669e5306] {\n    text-align: left;\n}\n.buttons button[data-v-669e5306]:first-child {\n    margin-bottom: 0.5rem;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -38101,7 +38124,7 @@ var render = function() {
           _c("div", { staticClass: "modal-body" }, [
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { for: "addExpenseName" } }, [
-                _vm._v("Pievienot jaunu izdevumu")
+                _vm._v("Izdevums")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -38454,7 +38477,7 @@ var render = function() {
           staticClass: "btn btn-success mb-1",
           attrs: { "data-toggle": "modal", "data-target": "#addExpense" }
         },
-        [_vm._v("\n    Pievienot izdevumu\n  ")]
+        [_vm._v("\n    +\n  ")]
       ),
       _vm._v(" "),
       _c("div", { staticClass: "table-responsive" }, [
@@ -38508,7 +38531,7 @@ var render = function() {
                 ])
               }),
               _vm._v(" "),
-              _c("td", { staticClass: "text-right", attrs: { colspan: "4" } }, [
+              _c("td", { staticClass: "total", attrs: { colspan: "4" } }, [
                 _c("h5", [
                   _vm._v("Kopā: " + _vm._s(_vm.totalSumOfExpenses) + " EUR")
                 ])

@@ -5,7 +5,7 @@
         <form>
           <div class="modal-body">
             <div class="form-group">
-              <label for="addExpenseName">Pievienot jaunu izdevumu</label>
+              <label for="addExpenseName">Izdevums</label>
               <input
                 type="text"
                 class="form-control"
@@ -87,6 +87,9 @@ export default {
     },
     addExpense() {
       this.$emit("add-expense", this.newExpense);
+      this.newExpense["name"] = "";
+      this.newExpense["amount"] = 0.0;
+      this.newExpense["status"] = 0;
     },
   },
 };

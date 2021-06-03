@@ -16,4 +16,8 @@ use App\Http\Controllers\ExpensesController;
 |
 */
 
-Route::get('/getAllExpenses', [ExpensesController::class, 'getAllExpenses']);
+Route::get('/expenses', [ExpensesController::class, 'getAllExpenses']);
+Route::post('/expenses', [ExpensesController::class, 'addNewExpense']);
+Route::delete('/expenses/{id}', [ExpensesController::class, 'deleteExpense']);
+// Route::middleware('auth:api')->get('/getAllExpenses', [ExpensesController::class, 'getAllExpenses']);
+// Route::middleware('auth:api')->post('/addNewExpense', [ExpensesController::class, 'addNewExpense']);

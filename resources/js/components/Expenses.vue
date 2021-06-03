@@ -6,7 +6,7 @@
       data-toggle="modal"
       data-target="#addExpense"
     >
-      Pievienot izdevumu
+      +
     </button>
     <div class="table-responsive">
       <table class="table table-hover">
@@ -42,7 +42,7 @@
               </button>
             </td>
           </tr>
-          <td class="text-right" colspan="4">
+          <td class="total" colspan="4">
             <h5>Kopā: {{ totalSumOfExpenses }} EUR</h5>
           </td>
         </tbody>
@@ -69,12 +69,13 @@ export default {
     return {
       selectedExpense: {},
       allExpenses: {},
+      updatedExpenses: false,
     };
   },
   methods: {
     getAllExpenses() {
       axios
-        .get("/api/getAllExpenses")
+        .get("/api/expenses")
         .then((response) => {
           this.allExpenses = response.data;
         })
@@ -94,15 +95,35 @@ export default {
       }
     },
     deleteExpense(id) {
-      this.allExpenses = this.allExpenses.filter(
-        (expense) => expense.id !== id
-      );
+      axios
+        .delete(`/api/expenses/${id}`)
+        .then((response) => {
+          console.log(response.data);
+          this.allExpenses = this.allExpenses.filter(
+            (expense) => expense.id !== id
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     editExpense(expense) {
       console.log(expense);
     },
     addExpense(expense) {
-      this.allExpenses.push(expense);
+      axios
+        .post("/api/expenses", {
+          name: expense.name,
+          amount: expense.amount,
+          status: expense.status,
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.getAllExpenses();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   computed: {
@@ -120,14 +141,17 @@ export default {
 };
 </script>
 <style scoped>
-.buttons {
+.buttons,
+.total {
   text-align: right;
 }
 @media (max-width: 768px) {
   .buttons {
     text-align: center;
   }
-
+  .total {
+    text-align: left;
+  }
   .buttons button:first-child {
     margin-bottom: 0.5rem;
   }

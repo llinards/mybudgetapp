@@ -10,6 +10,13 @@ class Expense extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'amount',
+        'user_id',
+        'status',
+        'name'
+    ];
+
     public function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
