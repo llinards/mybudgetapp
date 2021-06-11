@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       selectedExpense: {},
-      allExpenses: {},
+      allExpenses: [],
       updatedExpenses: false,
     };
   },
@@ -129,9 +129,9 @@ export default {
   computed: {
     totalSumOfExpenses() {
       let total = 0;
-      for (var i = 0; i < this.allExpenses.length; i++) {
-        total += parseFloat(this.allExpenses[i].amount);
-      }
+      this.allExpenses.forEach((expense) => {
+        total += parseFloat(expense.amount);
+      });
       return total;
     },
   },

@@ -2152,7 +2152,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       selectedExpense: {},
-      allExpenses: {},
+      allExpenses: [],
       updatedExpenses: false
     };
   },
@@ -2211,11 +2211,9 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     totalSumOfExpenses: function totalSumOfExpenses() {
       var total = 0;
-
-      for (var i = 0; i < this.allExpenses.length; i++) {
-        total += parseFloat(this.allExpenses[i].amount);
-      }
-
+      this.allExpenses.forEach(function (expense) {
+        total += parseFloat(expense.amount);
+      });
       return total;
     }
   },
