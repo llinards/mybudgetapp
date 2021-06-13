@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <h5>Izdevumi</h5>
     <button
       class="btn btn-success mb-1"
@@ -102,10 +102,15 @@ export default {
           status: expense.status,
         })
         .then((response) => {
-          this.getAllExpenses();
+          if (response.data == true) {
+            this.getAllExpenses();
+            this.$emit("return-status", true, "Izdevums pievienots!");
+          } else {
+            this.$emit("return-status", false, "Kļūda pievienojot izdevumu!");
+          }
         })
         .catch((err) => {
-          console.log(err);
+          this.$emit("return-status", false, "Kļūda pievienojot izdevumu!");
         });
     },
     editExpense(expense) {
@@ -116,22 +121,32 @@ export default {
           status: expense.status,
         })
         .then((response) => {
-          this.getAllExpenses();
+          if (response.data == true) {
+            this.getAllExpenses();
+            this.$emit("return-status", true, "Izdevums atjaunots!");
+          } else {
+            this.$emit("return-status", false, "Kļūda atjaunojot izdevumu!");
+          }
         })
         .catch((err) => {
-          console.log(err);
+          this.$emit("return-status", false, "Kļūda atjaunojot izdevumu!");
         });
     },
     deleteExpense(id) {
       axios
         .delete(`/api/expenses/${id}`)
         .then((response) => {
-          this.allExpenses = this.allExpenses.filter(
-            (expense) => expense.id !== id
-          );
+          if (response.data == true) {
+            this.allExpenses = this.allExpenses.filter(
+              (expense) => expense.id !== id
+            );
+            this.$emit("return-status", true, "Izdevums dzēsts!");
+          } else {
+            this.$emit("return-status", false, "Kļūda dzēšot izdevumu!");
+          }
         })
         .catch((err) => {
-          console.log(err);
+          this.$emit("return-status", false, "Kļūda dzēšot izdevumu!");
         });
     },
   },
