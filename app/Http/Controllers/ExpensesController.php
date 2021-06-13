@@ -38,6 +38,28 @@ class ExpensesController extends Controller
         }
     }
 
+    public function editExpense(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'amount' => 'required',
+                'name' => 'required',
+                'status' => 'required'
+            ]);
+            $updatedExpense = Expense::find($request->id);
+            $updatedExpense->user_id = 1;
+            $updatedExpense->amount = $request->amount;
+            $updatedExpense->name = $request->name;
+            $updatedExpense->status = $request->status;
+
+            $updatedExpense->save();
+
+            return true;
+        } catch(\Exception $e) {
+            return 'Error!';
+        }
+    }
+
     public function deleteExpense(Request $request)
     {
         try {

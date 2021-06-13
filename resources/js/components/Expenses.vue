@@ -73,16 +73,6 @@ export default {
     };
   },
   methods: {
-    getAllExpenses() {
-      axios
-        .get("/api/expenses")
-        .then((response) => {
-          this.allExpenses = response.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     expenseStatus(expense) {
       if (expense.status == 0) {
         return "Nav samaksāts";
@@ -94,21 +84,15 @@ export default {
         return "";
       }
     },
-    deleteExpense(id) {
+    getAllExpenses() {
       axios
-        .delete(`/api/expenses/${id}`)
+        .get("/api/expenses")
         .then((response) => {
-          console.log(response.data);
-          this.allExpenses = this.allExpenses.filter(
-            (expense) => expense.id !== id
-          );
+          this.allExpenses = response.data;
         })
         .catch((err) => {
           console.log(err);
         });
-    },
-    editExpense(expense) {
-      console.log(expense);
     },
     addExpense(expense) {
       axios
@@ -118,8 +102,33 @@ export default {
           status: expense.status,
         })
         .then((response) => {
-          console.log(response.data);
           this.getAllExpenses();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    editExpense(expense) {
+      axios
+        .put(`/api/expenses/${expense.id}`, {
+          name: expense.name,
+          amount: expense.amount,
+          status: expense.status,
+        })
+        .then((response) => {
+          this.getAllExpenses();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    deleteExpense(id) {
+      axios
+        .delete(`/api/expenses/${id}`)
+        .then((response) => {
+          this.allExpenses = this.allExpenses.filter(
+            (expense) => expense.id !== id
+          );
         })
         .catch((err) => {
           console.log(err);

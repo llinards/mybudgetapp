@@ -2157,15 +2157,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    getAllExpenses: function getAllExpenses() {
-      var _this = this;
-
-      axios.get("/api/expenses").then(function (response) {
-        _this.allExpenses = response.data;
-      })["catch"](function (err) {
-        console.log(err);
-      });
-    },
     expenseStatus: function expenseStatus(expense) {
       if (expense.status == 0) {
         return "Nav samaksāts";
@@ -2177,32 +2168,48 @@ __webpack_require__.r(__webpack_exports__);
         return "";
       }
     },
-    deleteExpense: function deleteExpense(id) {
-      var _this2 = this;
+    getAllExpenses: function getAllExpenses() {
+      var _this = this;
 
-      axios["delete"]("/api/expenses/".concat(id)).then(function (response) {
-        console.log(response.data);
-        _this2.allExpenses = _this2.allExpenses.filter(function (expense) {
-          return expense.id !== id;
-        });
+      axios.get("/api/expenses").then(function (response) {
+        _this.allExpenses = response.data;
       })["catch"](function (err) {
         console.log(err);
       });
     },
-    editExpense: function editExpense(expense) {
-      console.log(expense);
-    },
     addExpense: function addExpense(expense) {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.post("/api/expenses", {
         name: expense.name,
         amount: expense.amount,
         status: expense.status
       }).then(function (response) {
-        console.log(response.data);
+        _this2.getAllExpenses();
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    editExpense: function editExpense(expense) {
+      var _this3 = this;
 
+      axios.put("/api/expenses/".concat(expense.id), {
+        name: expense.name,
+        amount: expense.amount,
+        status: expense.status
+      }).then(function (response) {
         _this3.getAllExpenses();
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    deleteExpense: function deleteExpense(id) {
+      var _this4 = this;
+
+      axios["delete"]("/api/expenses/".concat(id)).then(function (response) {
+        _this4.allExpenses = _this4.allExpenses.filter(function (expense) {
+          return expense.id !== id;
+        });
       })["catch"](function (err) {
         console.log(err);
       });
